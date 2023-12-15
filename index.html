@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoPlantTracker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #2E8B57;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #2E8B57;
+        }
+
+        #plantForm, #statistics, #gallery, #about, #contact {
+            display: none;
+        }
+
+        #addPlantForm label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        #addPlantForm input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #addPlantForm button {
+            background-color: #2E8B57;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #plantList, #statistics, #gallery, #about, #contact {
+            margin-top: 20px;
+        }
+
+        #plants, #statisticsData, #galleryImages {
+            list-style: none;
+            padding: 0;
+        }
+
+        #plants li, #statisticsData li, #galleryImages li {
+            margin-bottom: 8px;
+            padding: 12px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #plants li button, #statisticsData li button, #galleryImages li button {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 6px;
+            margin-left: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #plants li button.edit, #statisticsData li button.edit, #galleryImages li button.edit {
+            background-color: #007bff;
+        }
+
+        #successMessage, #totalPlanted, #contactSuccessMessage {
+            color: #2E8B57;
+        }
+
+        #about p, #contact p {
+            color: #555;
+        }
+
+        #contactForm label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        #contactForm input, #contactForm textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #contactForm button {
+            background-color: #2E8B57;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>EcoPlantTracker</h1>
+    </header>
+
+    <nav>
+        <a href="#" onclick="showSection('plantForm')">Add Planting</a>
+        <a href="#" onclick="showSection('plantList')">Planting List</a>
+        <a href="#" onclick="showSection('statistics')">Statistics</a>
+        <a href="#" onclick="showSection('gallery')">Gallery</a>
+        <a href="#" onclick="showSection('about')">About</a>
+        <a href="#" onclick="showSection('contact')">Contact</a>
+    </nav>
+
+    <section id="plantForm">
+        <h2>Add a New Planting</h2>
+        <form id="addPlantForm">
+            <label for="plantName">Tree Species:</label>
+            <input type="text" id="plantName" required>
+
+            <label for="plantLocation">Planting Location:</label>
+            <input type="text" id="plantLocation" required>
+
+            <label for="plantDate">Planting Date:</label>
+            <input type="date" id="plantDate" required>
+
+            <button type="button" onclick="addPlant()">Add Planting</button>
+        </form>
+        <p id="successMessage"></p>
+    </section>
+
+    <section id="plantList">
+        <h2>Planting List</h2>
+        <p>Total Planted Trees: <span id="totalPlanted">0</span></p>
+        <ul id="plants"></ul>
+    </section>
+
+    <section id="statistics">
+        <h2>Statistics</h2>
+        <ul id="statisticsData">
+            <!-- Statistics will be dynamically populated here -->
+        </ul>
+    </section>
+
+    <section id="gallery">
+        <h2>Gallery</h2>
+        <ul id="galleryImages">
+            <!-- Gallery images will be dynamically populated here -->
+        </ul>
+    </section>
+
+    <section id="about">
+        <h2>About EcoPlantTracker</h2>
+        <p>
+            EcoPlantTracker is a web application designed to help individuals and communities keep track of their tree planting initiatives.
+            This tool provides a simple and user-friendly interface for adding, editing, and viewing planting data.
+        </p>
+        <p>Developed by [Your Name or Organization].</p>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <label for="contactName">Your Name:</label>
+            <input type="text" id="contactName" required>
+
+            <label for="contactEmail">Your Email:</label>
+            <input type="email" id="contactEmail" required>
+
+            <label for="contactMessage">Message:</label>
+            <textarea id="contactMessage" rows="4" required></textarea>
+
+            <button type="button" onclick="submitContactForm()">Send Message</button>
+        </form>
+        <p id="contactSuccessMessage"></p>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load plants from local storage on page load
+            loadPlants();
+            // Load statistics on page load
+            loadStatistics();
+            // Load gallery images on page load
+            loadGallery();
+        });
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.getElementById('plantForm').style.display = 'none';
+            document.getElementById('plantList').style.display = 'none';
+            document.getElementById('statistics').style.display = 'none';
+            document.getElementById('gallery').style.display = 'none';
+            document.getElementById('about').style.display = 'none';
+            document.getElementById('contact').style.display = 'none';
+
+            // Show the selected section
+            document.getElementById(sectionId).style.display = 'block';
+
+            // Update total planted count when showing the list section
+            if (sectionId === 'plantList') {
+                updateTotalPlanted();
+            }
+        }
+
+        function addPlant() {
+            var plantName = document.getElementById('plantName').value;
+            var plantLocation = document.getElementById('plantLocation').value;
+            var plantDate = document.getElementById('plantDate').value;
+
+            if (plantName && plantLocation && plantDate) {
+                var plantEntry = `${plantName} - ${plantLocation} - ${plantDate}`;
+                var plantList = document.getElementById('plants');
+                var listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    ${plantEntry}
+                    <button class="edit" onclick="editPlant(this)">Edit</button>
+                    <button onclick="removePlant(this)">Remove</button>
+                `;
+                plantList.appendChild(listItem);
+
+                // Save plant to local storage
+                savePlant(plantEntry);
+
+                // Update total planted count
+                updateTotalPlanted();
+
+                // Display success message
+                var successMessage = document.getElementById('successMessage');
+                successMessage.textContent = 'Planting added successfully!';
+                setTimeout(function () {
+                    successMessage.textContent = '';
+                }, 3000);
+
+                // Clear the form
+                document.getElementById('addPlantForm').reset();
+            }
+        }
+
+        function savePlant(plantEntry) {
+            var plants = JSON.parse(localStorage.getItem('plants')) || [];
+            plants.push(plantEntry);
+            localStorage.setItem('plants', JSON.stringify(plants));
+        }
+
+        function loadPlants() {
+            var plantList = document.getElementById('plants');
+            plantList.innerHTML = '';
+            var plants = JSON.parse(localStorage.getItem('plants')) || [];
+            plants.forEach(function (plant) {
+                var listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    ${plant}
+                    <button class="edit" onclick="editPlant(this)">Edit</button>
+                    <button onclick="removePlant(this)">Remove</button>
+                `;
+                plantList.appendChild(listItem);
+            });
+
+            // Update total planted count
+            updateTotalPlanted();
+        }
+
+        function removePlant(button) {
+            var plantList = document.getElementById('plants');
+            var listItem = button.parentNode;
+            var plantText = listItem.textContent.trim();
+            var plants = JSON.parse(localStorage.getItem('plants')) || [];
+            plants = plants.filter(function (plant) {
+                return plant !== plantText;
+            });
+            localStorage.setItem('plants', JSON.stringify(plants));
+            plantList.removeChild(listItem);
+
+            // Update total planted count
+            updateTotalPlanted();
+        }
+
+        function editPlant(button) {
+            var listItem = button.parentNode;
+            var plantText = listItem.textContent.trim();
+
+            // Populate form with existing values for editing
+            var plantValues = plantText.split(' - ');
+            document.getElementById('plantName').value = plantValues[0];
+            document.getElementById('plantLocation').value = plantValues[1];
+            document.getElementById('plantDate').value = plantValues[2];
+
+            // Remove the edited plant entry from the list
+            removePlant(button);
+        }
+
+        function updateTotalPlanted() {
+            var totalPlanted = JSON.parse(localStorage.getItem('plants'))?.length || 0;
+            document.getElementById('totalPlanted').textContent = totalPlanted;
+        }
+
+        function loadStatistics() {
+            var statisticsList = document.getElementById('statisticsData');
+            statisticsList.innerHTML = '';
+
+            // Sample statistics data (you can replace this with real data)
+            var statisticsData = [
+                'Total Planted Trees: 100',
+                'Most Planted Tree Species: Oak',
+                'Average Planting Rate: 5 trees per month'
+            ];
+
+            statisticsData.forEach(function (statistic) {
+                var listItem = document.createElement('li');
+                listItem.textContent = statistic;
+                statisticsList.appendChild(listItem);
+            });
+        }
+
+        function loadGallery() {
+            var galleryList = document.getElementById('galleryImages');
+            galleryList.innerHTML = '';
+
+            // Sample gallery images (you can replace this with real data)
+            var galleryImages = [
+                'image1.jpg',
+                'image2.jpg',
+                'image3.jpg'
+            ];
+
+            galleryImages.forEach(function (image) {
+                var listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <img src="${image}" alt="Gallery Image">
+                    <button class="edit" onclick="editGalleryImage(this)">Edit</button>
+                    <button onclick="removeGalleryImage(this)">Remove</button>
+                `;
+                galleryList.appendChild(listItem);
+            });
+        }
+
+        function submitContactForm() {
+            var contactName = document.getElementById('contactName').value;
+            var contactEmail = document.getElementById('contactEmail').value;
+            var contactMessage = document.getElementById('contactMessage').value;
+
+            if (contactName && contactEmail && contactMessage) {
+                // You can implement your contact form submission logic here
+
+                // Display success message
+                var contactSuccessMessage = document.getElementById('contactSuccessMessage');
+                contactSuccessMessage.textContent = 'Message sent successfully!';
+                setTimeout(function () {
+                    contactSuccessMessage.textContent = '';
+                }, 3000);
+
+                // Clear the form
+                document.getElementById('contactForm').reset();
+            }
+        }
+
+        function removeGalleryImage(button) {
+            var galleryList = document.getElementById('galleryImages');
+            var listItem = button.parentNode;
+            galleryList.removeChild(listItem);
+        }
+
+        function editGalleryImage(button) {
+            // You can implement image editing logic here
+            alert('Edit functionality for gallery images is not implemented in this example.');
+        }
+    </script>
+</body>
+</html>
